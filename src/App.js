@@ -121,6 +121,16 @@ function evaluate({ currentOperand, prevOperand, operation }) {
   return computation.toString();
 }
 
+const INT_FORMATTER = new Intl.NumberFormat("en-us", {
+  maximumFractionDigits: 0,
+});
+function formatOperand(operand) {
+  if (operand == null) return;
+  const [integer, decimal] = operand.split(".");
+  if (decimal == null) return INT_FORMATTER.format(integer);
+  return `${INT_FORMATTER.format(integer)}.${decimal}`;
+}
+
 function App() {
   const [{ currentOperand, prevOperand, operation }, dispatch] = useReducer(
     reducer,
@@ -133,9 +143,9 @@ function App() {
       <div className="output">
         <div className="prev-operand">
           {" "}
-          {prevOperand} {operation}{" "}
+          {formatOperand(prevOperand)} {operation}{" "}
         </div>
-        <div className="curr-operand">{currentOperand} </div>
+        <div className="curr-operand">{formatOperand(currentOperand)} </div>
       </div>
       <button
         className="span-two"
